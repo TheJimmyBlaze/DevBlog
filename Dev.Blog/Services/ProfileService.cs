@@ -33,7 +33,7 @@ namespace Dev.Blog.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("{0} Json path: {1} could not be deserialized into a Profile.", COLLECT_ERROR, path), ex);
+                throw new InvalidOperationException(string.Format("{0} Json path: {1} could not be deserialized into a Profile.", COLLECT_ERROR, path), ex);
             }
         }
     }
