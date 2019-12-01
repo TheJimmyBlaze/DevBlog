@@ -1,0 +1,10 @@
+﻿
+:root {
+    --blog-background: #212529;
+    --blog-on-background: #ffffff;
+}
+
+.blog-background {
+    background-color: var(--blog-background);
+    color: var(--blog-on-background);
+}
