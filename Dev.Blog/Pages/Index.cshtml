@@ -4,22 +4,17 @@
     ViewData["Title"] = "Home page";
 }
 
+@using Components
+
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 p-2 p-lg-4 d-flex align-items-stretch">
-                <div class="card bg-dark shadow-sm">
-                    <img src="https://picsum.photos/300" height="300" class="card-img-top"/>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Card Title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary mt-auto">Go somewhere</a>
-                    </div>
-                </div>
+            <div class="col-md-4 d-flex align-items-stretch py-3 py-xl-4">
+                @(await Html.RenderComponentAsync<ProfileCard>(RenderMode.ServerPrerendered))
             </div>
-            <div class="col-md-8 p-2 p-lg-4 d-flex align-items-stretch">
+            <div class="col-md-8 d-flex align-items-stretch py-3 py-xl-4">
                 <div class="card bg-dark shadow-sm ml-auto">
-                    <img src="https://picsum.photos/600/300" height="300" class="card-img-top" />
+                    <img src="https://picsum.photos/600/300" class="card-img-top img-fluid" />
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">Card Title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -29,9 +24,10 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12 p-2 p-lg-4">
+        <div class="row py-3 py-xl-4">
+            <div class="col-md-12">
                 <div class="card bg-dark shadow-sm">
+                    <h5 class="card-header">WAIWO - What am I working on?</h5>
                     <div class="card-body">
                         <h5 class="card-title">Card Title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>

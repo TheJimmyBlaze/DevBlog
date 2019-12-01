@@ -8,4 +8,11 @@
     <Folder Include="wwwroot\data\profiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\images\DefaultProfileThumb.png">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
