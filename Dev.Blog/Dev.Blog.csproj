@@ -5,11 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\data\profiles\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\images\DefaultProfileThumb.png">
+    <Content Update="wwwroot\images\profiles\DefaultProfileThumb.png">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

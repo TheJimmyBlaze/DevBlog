@@ -1,15 +1,19 @@
-﻿
+﻿@using System.Threading;
+@using Models;
+@using Services;
+@inject ProfileService ProfileService;
+
 <div class="card bg-dark shadow-sm">
     <div class="card-img-top d-flex align-items-center justify-content-center blog-profile-background">
         <div class="m-2 m-xl-3 p-2 p-xl-3 bg-dark shadow rounded-circle">
-            <img src="/images/DefaultProfileThumb.png" class="shadow rounded-circle xl" />
+            <img src="@profile?.GetImagePath()" class="shadow rounded-circle xl" />
         </div>
     </div>
-    <div class="card-body d-flex flex-column shadow-lg">
-        <h3 class="card-title mb-0">John Doe</h3>
-        <h6 class="text-muted">Middle of Nowhere</h6>
+    <div class="card-body d-flex flex-column">
+        <h3 class="card-title mb-0">@profile?.Name</h3>
+        <h6 class="text-muted">@profile?.Location</h6>
 
-        <p class="card-text my-auto py-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class="card-text my-auto py-2">@profile?.Blurb</p>
 
         <div class="btn-group mt-auto">
             <button type="button" class="btn btn-primary"><i class="h3 my-auto fas fa-envelope-square"></i></button>
@@ -20,5 +24,11 @@
 </div>
 
 @code {
+    [Parameter]
+    public string ProfileJsonPath { get; set; }
 
+    private Profile profile;
+
+    protected override async Task OnInitializedAsync() =>
+        profile = await ProfileService.GetProfileAsync(ProfileJsonPath);
 }
