@@ -13,21 +13,14 @@
                 @(await Html.RenderComponentAsync<ProfileCard>(RenderMode.ServerPrerendered, new { ProfileJsonPath = "CameronTaylor.json" }))
             </div>
             <div class="col-md-8 d-flex align-items-stretch py-3 py-xl-4">
-                <div class="card bg-dark shadow-sm ml-auto">
-                    <img src="https://picsum.photos/600/300" class="card-img-top img-fluid" />
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Card Title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary mt-auto">Go somewhere</a>
-                    </div>
-                </div>
+                @(await Html.RenderComponentAsync<LatestUpdateCard>(RenderMode.ServerPrerendered))
             </div>
         </div>
 
         <div class="row py-3 py-xl-4">
             <div class="col-md-12">
                 <div class="card bg-dark shadow-sm">
-                    <h5 class="card-header">WAIWO - What am I working on?</h5>
+                    <h5 class="card-header">Whats New?</h5>
                     <div class="card-body">
                         <h5 class="card-title">Card Title</h5>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>

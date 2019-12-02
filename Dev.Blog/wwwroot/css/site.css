@@ -13,3 +13,8 @@
     background: url(../images/PolyBackground.png);
     background-size: cover;
 }
+
+.blog-latest-update-card-content {
+    opacity: 0.9;
+    margin: -1px;
+}
