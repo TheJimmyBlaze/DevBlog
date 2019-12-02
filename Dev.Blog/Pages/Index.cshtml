@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 d-flex align-items-stretch py-3 py-xl-4">
-                @(await Html.RenderComponentAsync<ProfileCard>(RenderMode.Static, new { ProfileJsonPath = "CameronTaylor.json" }))
+                @(await Html.RenderComponentAsync<ProfileCard>(RenderMode.ServerPrerendered, new { ProfileJsonPath = "CameronTaylor.json" }))
             </div>
             <div class="col-md-8 d-flex align-items-stretch py-3 py-xl-4">
                 <div class="card bg-dark shadow-sm ml-auto">

@@ -35,5 +35,11 @@ namespace Dev.Blog.Models
 
             return path;
         }
+
+        public string GetMailToAddress()
+        {
+            const string MAIL_TO = "mailto";
+            return string.Format("{0}:{1}", MAIL_TO, Email);
+        }
     }
 }
