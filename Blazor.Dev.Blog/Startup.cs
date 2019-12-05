@@ -28,7 +28,10 @@ namespace Blazor.Dev.Blog
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
             services.AddTransient<ProfileService>();
+            services.AddSingleton<CategoryService>();
+            services.AddSingleton<PostService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

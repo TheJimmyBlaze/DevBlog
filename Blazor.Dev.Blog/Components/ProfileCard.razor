@@ -1,5 +1,4 @@
-﻿@using System.Threading;
-@using Models;
+﻿@using Models;
 @using Services;
 @inject ProfileService ProfileService;
 
@@ -8,7 +7,7 @@
         {
             <div class="card-img-top d-flex align-items-center justify-content-center blog-profile-background">
                 <div class="m-2 m-xl-3 p-2 p-xl-3 bg-dark shadow rounded-circle">
-                    <img src="@profile?.GetImagePath()" class="shadow rounded-circle xl" />
+                    <img src="@ProfileService.GetImagePath(profile)" class="shadow rounded-circle xl" />
                 </div>
             </div>
         }
@@ -25,15 +24,15 @@
             }
             else
             {
-                <h3 class="card-title mb-0">@profile?.Name</h3>
-                <h6 class="text-muted">@profile?.Location</h6>
+                <h3 class="card-title mb-0">@profile.Name</h3>
+                <h6 class="text-muted">@profile.Location</h6>
 
-                <p class="card-text my-auto py-3">@profile?.Blurb</p>
+                <p class="card-text my-auto py-3">@profile.Blurb</p>
 
                 <div class="btn-group mt-auto">
-                    <a href="@profile?.GetMailToAddress()" class="btn btn-primary"><i class="h3 my-auto fas fa-envelope"></i></a>
-                    <a href="@profile?.Github" target="_blank" class="btn btn-primary"><i class="h3 my-auto fab fa-github-square"></i></a>
-                    <a href="@profile?.LinkedIn" target="_blank" class="btn btn-primary"><i class="h3 my-auto fab fa-linkedin"></i></a>
+                    <a href="@ProfileService.GetMailToAddress(profile)" class="btn btn-primary"><i class="h3 my-auto fas fa-envelope"></i></a>
+                    <a href="@profile.Github" target="_blank" class="btn btn-primary"><i class="h3 my-auto fab fa-github-square"></i></a>
+                    <a href="@profile.LinkedIn" target="_blank" class="btn btn-primary"><i class="h3 my-auto fab fa-linkedin"></i></a>
                 </div>
             }
         </div>
@@ -49,7 +48,7 @@
     {
         if (firstRender)
         {
-            await Task.Run(() => Thread.Sleep(500)); //Look busy
+            await Task.Delay(1000); //Look busy
             profile = await ProfileService.GetProfileAsync(ProfileJsonPath);
             StateHasChanged();
         }

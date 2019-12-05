@@ -1,0 +1,13 @@
+{
+  "PostNaturalID": "MakingTheMannor",
+  "Title": "Building the Mannor",
+  "CreationDateUTC": "2019-12-05T05:35:00.0Z",
+  "ImageName": "ProjectFactory/MannorCropped.png",
+  "Blurb": "This week were back in MagicaVoxel working on some buildings for our Unity RTS game. I was going for a rustic old-timey feel, came out looking good.",
+  "Body": "<h1>This is a test.</h1>",
+  "Tags": [
+    "Factory",
+    "Unity",
+    "MagicaVoxel"
+  ]
+}

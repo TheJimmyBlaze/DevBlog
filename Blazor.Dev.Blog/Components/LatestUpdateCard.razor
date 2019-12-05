@@ -1,4 +1,7 @@
-﻿
+﻿@using Models;
+@using Services;
+@inject PostService PostService;
+
 <div class="card shadow-sm w-100 h-100" style="background: url(/images/Posts/ProjectFactory/MannorCropped.png); background-size: cover; background-position: center">
     <div class="card-body row no-gutters justify-content-end p-0 rounded-right blog-latest-update-card-content">
         <div class="col-6 col-lg-4 bg-dark p-2 p-xl-3 text-right shadow-sm d-flex flex-column">
@@ -13,8 +16,7 @@
 
             <div class="container-fluid mt-auto py-3">
                 <p class="card-text text-center">
-                    This week were back in MagicaVoxel working on some buildings for our Unity RTS game.
-                    I was going for a rustic old-timey feel, came out looking good.
+                    @post?.Blurb
                 </p>
                 <h6 class="text-muted">2/12/2019</h6>
             </div>
@@ -27,5 +29,19 @@
 </div>
 
 @code {
+    [Parameter]
+    public string PostNaturalID { get; set; }
 
+    private Post post;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Task.Delay(1200); //Look busy
+
+            post = await PostService.GetPost(PostNaturalID);
+            StateHasChanged();
+        }
+    }
 }
