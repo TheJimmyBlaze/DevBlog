@@ -10,10 +10,11 @@ namespace Blazor.Dev.Blog.Models
     {
         public string CategoryNaturalID { get; set; }
 
+        public string Github { get; set; }
+
         public string Name { get; set; }
         public string CreationDateUTC { get; set; }
 
         public string ImageName { get; set; }
-        public List<string> PostsNaturalIDs { get; set; }
     }
 }

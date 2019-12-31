@@ -9,7 +9,7 @@
     color: var(--blog-on-background);
 }
 
-.blog-profile-background {
+.blog-geometric-background {
     background: url(../images/PolyBackground.png);
     background-size: cover;
 }

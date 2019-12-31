@@ -1,38 +1,61 @@
 ﻿@using Models;
 @using Services;
 @inject PostService PostService;
+@inject CategoryService CategoryService;
 
-<div class="card shadow-sm w-100 h-100" style="background: url(/images/Posts/ProjectFactory/MannorCropped.png); background-size: cover; background-position: center">
-    <div class="card-body row no-gutters justify-content-end p-0 rounded-right blog-latest-update-card-content">
-        <div class="col-6 col-lg-4 bg-dark p-2 p-xl-3 text-right shadow-sm d-flex flex-column">
-            <div class="container-fluid d-inline align-content-end">
-                <a href="#" class="badge badge-primary mx-1">Factory</a>
-                <a href="#" class="badge badge-info mx-1">Unity</a>
-                <a href="#" class="badge badge-info mx-1">MagicaVoxel</a>
-            </div>
+    <div class="card w-100 h-100 bg-dark" style="background: url(@SwitchURL(PostService.GetImagePath(post))); background-size: cover; background-position: center">
+        <div class="card-body row no-gutters justify-content-end p-0 rounded-right blog-latest-update-card-content">
+            @if (post == null || category == null)
+            {
+                <div class="container bg-secondary rounded my-auto mx-3 py-3">
+                    <h6 class="text">Loading Latest Post...</h6>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-6 col-lg-4 bg-dark p-2 p-xl-3 text-right shadow-sm d-flex flex-column">
+                    <div class="container-fluid d-inline align-content-end">
+                        @foreach(string raw in post.Tags)
+                        {
+                            Tuple<string, string> tag = PostService.CreateTag(raw);
+                            <a href="#" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
+                        }
+                    </div>
 
-            <h4 class="mb-0">Project: Factory</h4>
-            <h6 class="text-muted">Building the Mannor</h6>
+                    <h4 class="mb-0">@category.Name</h4>
+                    <h6 class="text-muted">@post.Title</h6>
 
-            <div class="container-fluid mt-auto py-3">
-                <p class="card-text text-center">
-                    @post?.Blurb
-                </p>
-                <h6 class="text-muted">2/12/2019</h6>
-            </div>
+                    <div class="container-fluid mt-auto py-3 px-0">
+                        <p class="card-text text-center">
+                            @post.Blurb
+                        </p>
+                        <h6 class="text-muted">@post.CreationDateUTC.ToString(@"dd/MM/yy")</h6>
+                    </div>
 
-            <div class="container-fluid text-right mt-auto">
-                <button type="button" class="btn btn-primary btn-block">Read More</button>
-            </div>
+                    <div class="container-fluid text-right mt-auto">
+                        <a href="post/@post.PostNaturalID" class="btn btn-primary btn-block">Read More</a>
+                    </div>
+                </div>
+            }
         </div>
     </div>
-</div>
 
 @code {
     [Parameter]
     public string PostNaturalID { get; set; }
 
     private Post post;
+    private Category category;
+
+    private string SwitchURL(string url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return null;
+        return url.Replace('\\', '/');
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -41,6 +64,8 @@
             await Task.Delay(1200); //Look busy
 
             post = await PostService.GetPost(PostNaturalID);
+            category = await CategoryService.GetCategoryForPost(post);
+
             StateHasChanged();
         }
     }

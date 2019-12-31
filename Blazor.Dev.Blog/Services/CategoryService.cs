@@ -58,10 +58,12 @@ namespace Blazor.Dev.Blog.Services
             return categoryCache;
         }
 
-        public async Task<Category> GetCategoryOfPost(string postNaturalID)
+        public async Task<Category> GetCategoryForPost(Post post, bool refreshCache = false)
         {
-            IEnumerable<Category> categories = await GetAllCategoriesAsync();
-            return categories.SingleOrDefault(x => x.PostsNaturalIDs.Contains(postNaturalID));
+            if (post == null)
+                return null;
+            
+            return (await GetAllCategoriesAsync(refreshCache)).FirstOrDefault(category => category.CategoryNaturalID == post.CategoryNaturalID);
         }
 
         public string GetImagePath(Category category)

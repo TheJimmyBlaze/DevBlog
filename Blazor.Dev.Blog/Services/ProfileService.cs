@@ -46,6 +46,9 @@ namespace Blazor.Dev.Blog.Services
 
         public string GetImagePath(Profile profile)
         {
+            if (profile == null)
+                return @"images\Default.png";
+
             const string COLLECT_ERROR = "Failed to collect profile image!";
             const string IMAGE_PATH = @"images\profiles";
 

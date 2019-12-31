@@ -10,6 +10,7 @@ namespace Blazor.Dev.Blog.Models
     public class Post
     {
         public string PostNaturalID { get; set; }
+        public string CategoryNaturalID { get; set; }
 
         public string Title { get; set; }
         public DateTime CreationDateUTC { get; set; }
