@@ -3,5 +3,6 @@
   "Github": "https://www.Github.com/TheJimmyBlaze/ProjectFactory",
   "Name": "Project Factory",
   "CreationDateUTC": "2019-12-05T05:30:00.0Z",
+  "Blurb":  "A top down ARPG RTS hybrid in the vein inspired by Modded Minecraft, Factorio, and Banished. Built in Unity using C#.NET and with simple Voxel graphical assets.",
   "ImageName": "Unity.jpg"
 }

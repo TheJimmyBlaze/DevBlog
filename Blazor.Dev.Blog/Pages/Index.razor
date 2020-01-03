@@ -1,12 +1,55 @@
-﻿@page "/"
+﻿@using Models;
+@using Services;
+@inject CategoryService CategoryService;
+
+@page "/"
 
 <div class="container">
     <div class="row">
         <div class="col-md-4 d-flex align-items-stretch py-3 py-xl-4">
-            <Blazor.Dev.Blog.Components.ProfileCard ProfileJsonPath="CameronTaylor.json"/>
+            <Blazor.Dev.Blog.Components.ProfileCard ProfileJsonPath="CameronTaylor.json" />
         </div>
         <div class="col-md-8 d-flex align-items-stretch py-3 py-xl-4">
-            <Blazor.Dev.Blog.Components.LatestUpdateCard PostNaturalID="MakingTheMannor"/>
+            <Blazor.Dev.Blog.Components.LatestUpdateCard PostNaturalID="MakingTheMannor" />
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-12 shadow">
+            <div class="container">
+                <div class="row rounded-top blog-geometric-background-gray p-3 shadow">
+                    <h3>Projects</h3>
+                </div>
+                <div class="row d-flex blog-mid-background rounded-bottom">
+
+                    @if (categories == null || categories.Count() == 0)
+                    {
+                        <div class="container bg-secondary rounded m-3 py-3">
+                            <h6 class="text">Loading Projects...</h6>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (Category category in categories)
+                        {
+                            <Blazor.Dev.Blog.Components.CategoryCard CategoryNaturalID="@category.CategoryNaturalID" />
+                        }
+                    }
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+@code  {
+    private IEnumerable<Category> categories;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        categories = await CategoryService.GetAllCategoriesAsync();
+        StateHasChanged();
+    }
+}

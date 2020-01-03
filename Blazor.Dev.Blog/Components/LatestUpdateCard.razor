@@ -61,9 +61,7 @@
     {
         if (firstRender)
         {
-            await Task.Delay(1200); //Look busy
-
-            post = await PostService.GetPost(PostNaturalID);
+            post = await PostService.GetPostAsync(PostNaturalID);
             category = await CategoryService.GetCategoryForPost(post);
 
             StateHasChanged();

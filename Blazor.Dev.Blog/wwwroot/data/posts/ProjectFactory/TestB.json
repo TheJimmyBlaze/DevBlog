@@ -1,0 +1,15 @@
+{
+  "PostNaturalID": "TestB",
+  "CategoryNaturalID": "ProjectFactory",
+  "Title": "This is another Test",
+  "CreationDateUTC": "2019-12-05T05:35:00.0Z",
+  "ImageName": "ProjectFactory\\MannorCropped.png",
+  "Blurb": "Blah blah blah.",
+  "Body": "ProjectFactory\\LoremIpsum.html",
+  "Tags": [
+    "category;Test",
+    "topic;Testing",
+    "tech;Nothing",
+    "tech;Boats"
+  ]
+}

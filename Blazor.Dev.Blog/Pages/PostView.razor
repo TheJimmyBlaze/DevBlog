@@ -4,74 +4,98 @@
 @inject CategoryService CategoryService;
 
 @page "/post/{PostNaturalID}"
+@page "/post/category/{CategoryNaturalID}"
 
     <div class="container">
-        @if (post == null || category == null)
-        {
-            <div class="row bg-dark p-3 rounded my-3 w-50 mx-auto">
-                <div class="container bg-secondary rounded my-auto py-3">
-                    <h6 class="text">Loading Post Details...</h6>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+        <div class="row">
+            @if (post == null || category == null)
+            {
+                <div class="row bg-dark p-3 rounded my-3 w-50 mx-auto">
+                    <div class="container bg-secondary rounded my-auto py-3">
+                        <h6 class="text">Loading Post Details...</h6>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-        else
-        {
-            <div class="row mx-auto my-3 mb-1 bg-dark rounded py-3">
-                <div class="col-3 col-md-2 col-xl-1 h-auto">
-                    <div class="rounded shadow h-100" style="background-image:url(@SwitchUrl(CategoryService.GetImagePath(category))); background-size: cover; background-position: center;" />
+            }
+            else
+            {
+                <div class="col-xl-3 col-lg-4">
+                    <div class="row mx-auto">
+                        <div class="col-12 mt-3 p-0">
+                            <Blazor.Dev.Blog.Components.CategoryBrowserCard PostNaturalID="@post.PostNaturalID" />
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-4 col-md-6 col-lg-7 col-xl-8 my-auto">
-                    <h3>@category.Name</h3>
-                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="row mx-auto my-3 mb-1 bg-dark rounded py-3">
+                        <div class="col-3 col-xl-2 h-auto">
+                            <div class="rounded shadow h-100" style="background-image:url(@SwitchUrl(CategoryService.GetImagePath(category))); background-size: cover; background-position: center;" />
+                        </div>
 
-                <div class="col-3 col-md-2 h-auto w-auto">
-                    <button type="button" class="btn btn-primary h-100">
-                        Browse Category
-                    </button>
-                </div>
+                        <div class="col-7 col-md-7 col-xl-8 col-xl-9 my-auto">
+                            <h3>@category.Name</h3>
+                        </div>
 
-                <div class="col-2 col-lg-1 h-auto">
-                    <a href="@category.Github" target="_blank" class="btn btn-success h-100 d-flex justify-content-center">
-                        <i class="h3 my-auto fab fa-github-square"></i>
-                    </a>
-                </div>
-            </div>
+                        <div class="col-2 col-xl-1 h-auto">
+                            <a href="@category.Github" target="_blank" class="btn btn-success h-100 d-flex justify-content-center">
+                                <i class="h3 my-auto fab fa-github-square"></i>
+                            </a>
+                        </div>
+                    </div>
 
-            <div class="row mx-auto p-3 bg-dark rounded-top blog-geometric-background">
-                <div class="container d-flex">
-                    @foreach (string raw in post.Tags)
-                    {
-                        Tuple<string, string> tag = PostService.CreateTag(raw);
-                        <a href="#" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
-                    }
-                </div>
+                    <div class="row mx-auto p-3 bg-dark rounded-top blog-geometric-background shadow">
+                        <div class="container d-flex">
+                            @foreach (string raw in post.Tags)
+                            {
+                                Tuple<string, string> tag = PostService.CreateTag(raw);
+                                <a href="#" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
+                            }
+                        </div>
 
-                <div class="container pt-2">
-                    <h3>@post.Title</h3>
-                </div>
+                        <div class="container pt-2">
+                            <h3>@post.Title</h3>
+                        </div>
 
-                <div class="container pb-2">
-                    <h6>@post.CreationDateUTC.ToString(@"dd/MM/yy")</h6>
-                </div>
-            </div>
+                        <div class="container pb-2">
+                            <h6>@post.CreationDateUTC.ToString(@"dd/MM/yy")</h6>
+                        </div>
+                    </div>
 
-            <div class="row mx-auto p-3 mb-6 rounded-bottom bg-dark">
-                @((MarkupString)postBody)
-            </div>
-        }
+                    <div class="row mx-auto p-3 mb-6 rounded-bottom bg-dark">
+                        @((MarkupString)postBody)
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 
 @code {
+    private string postNaturalID;
     [Parameter]
-    public string PostNaturalID { get; set; }
+    public string PostNaturalID
+    {
+        get { return postNaturalID; }
+        set
+        {
+            if (post != null)
+                CategoryNaturalID = string.Empty;
+
+            postNaturalID = value;
+            _ = OnAfterRenderAsync(true);
+        }
+    }
+
+    [Parameter]
+    public string CategoryNaturalID { get; set; }
 
     private Post post;
     private string postBody;
     private Category category;
+
+    private bool underConstruction = false;
 
     private string SwitchUrl(string url)
     {
@@ -84,11 +108,21 @@
     {
         if (firstRender)
         {
-            await Task.Delay(1200); //Look busy
+            string postID = PostNaturalID;
 
-            post = await PostService.GetPost(PostNaturalID);
-            postBody = await PostService.GetPostBodyAsync(post);
-            category = await CategoryService.GetCategoryForPost(post);
+            if (!string.IsNullOrEmpty(CategoryNaturalID))
+            {
+                Post post = await PostService.GetLatestPostForCategoryAsync(CategoryNaturalID);
+                if (post != null)
+                    postID = post.PostNaturalID;
+            }
+
+            post = await PostService.GetPostAsync(postID);
+            if (post != null)
+            {
+                postBody = await PostService.GetPostBodyAsync(post);
+                category = await CategoryService.GetCategoryForPost(post);
+            }
 
             StateHasChanged();
         }

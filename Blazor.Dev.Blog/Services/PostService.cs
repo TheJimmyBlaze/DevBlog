@@ -68,8 +68,11 @@ namespace Blazor.Dev.Blog.Services
             return postCache;
         }
 
-        public async Task<Post> GetPost(string postNaturalID)
+        public async Task<Post> GetPostAsync(string postNaturalID)
         {
+            if (string.IsNullOrEmpty(postNaturalID))
+                return null;
+
             IEnumerable<Post> posts = await GetAllPostsAync();
             return posts.SingleOrDefault(x => x.PostNaturalID.ToLower() == postNaturalID.ToLower());
         }
@@ -85,6 +88,34 @@ namespace Blazor.Dev.Blog.Services
                 throw new ArgumentException(string.Format("{0} Category: {1} could not be found.", COLLECT_ERROR, categoryNaturalID));
             
             return (await GetAllPostsAync(refreshCache)).Where(post => post.CategoryNaturalID == categoryNaturalID);
+        }
+
+        public async Task<Post> GetLatestPostForCategoryAsync(string categoryNaturalID, bool refreshCache = false)
+        {
+            if (string.IsNullOrEmpty(categoryNaturalID))
+                return null;
+
+            IEnumerable<Post> posts = await GetAllPostsForCategory(categoryNaturalID, refreshCache);
+            if (posts.Count() == 0)
+                return null;
+
+            Post latestPost = posts.OrderByDescending(post => post.CreationDateUTC).First();
+
+            return latestPost;
+        }
+
+        public async Task<Post> GetNextPostForCategoryAsync(Category category, Post post, bool refreshCache = false)
+        {
+            if (category == null || post == null)
+                return null;
+
+            IEnumerable<Post> posts = await GetAllPostsForCategory(category.CategoryNaturalID, refreshCache);
+            if (posts.Count() == 0)
+                return null;
+
+            while (posts.Take(1).First() != post) { }
+
+            return posts.First();
         }
 
         public async Task<string> GetPostBodyAsync(Post post)

@@ -48,7 +48,6 @@
     {
         if (firstRender)
         {
-            await Task.Delay(1000); //Look busy
             profile = await ProfileService.GetProfileAsync(ProfileJsonPath);
             StateHasChanged();
         }

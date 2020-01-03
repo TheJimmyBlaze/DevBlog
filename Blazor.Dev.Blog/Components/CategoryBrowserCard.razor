@@ -1,0 +1,66 @@
+﻿@using Models;
+@using Services;
+@inject PostService PostService;
+@inject CategoryService CategoryService;
+
+    <div class="container w-100 shadow">
+        <div class="row rounded-top blog-geometric-background-gray shadow p-3">
+            <h3>Project Posts</h3>
+        </div>
+
+        <div class="row rounded-bottom p-3 bg-dark">
+            @if (posts == null)
+            {
+                <div class="container bg-secondary rounded my-auto py-3">
+                    <h6 class="text">Loading Posts...</h6>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <ul class="nav nav-pills flex-column w-100">
+                    @foreach (Post post in posts)
+                    {
+                        <li class="nav-item">
+                            @if (post.PostNaturalID == PostNaturalID)
+                            {
+                                <a class="nav-link active" href="post/@post.PostNaturalID">@post.Title</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-white" href="post/@post.PostNaturalID">@post.Title</a>
+                            }
+                        </li>
+                    }
+
+                    @if (posts.Count() == 1)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link disabled text-muted">Only one post!?</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+@code {
+    [Parameter]
+    public string PostNaturalID { get; set; }
+
+    private IEnumerable<Post> posts;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Post post = await PostService.GetPostAsync(PostNaturalID);
+            posts = await PostService.GetAllPostsForCategory(post.CategoryNaturalID);
+            posts.OrderByDescending(post => post.CreationDateUTC);
+
+            StateHasChanged();
+        }
+    }
+}

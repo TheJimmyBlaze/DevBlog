@@ -13,7 +13,8 @@ namespace Blazor.Dev.Blog.Models
         public string Github { get; set; }
 
         public string Name { get; set; }
-        public string CreationDateUTC { get; set; }
+        public DateTime CreationDateUTC { get; set; }
+        public string Blurb { get; set; }
 
         public string ImageName { get; set; }
     }

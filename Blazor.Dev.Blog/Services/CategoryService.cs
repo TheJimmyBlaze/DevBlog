@@ -58,6 +58,14 @@ namespace Blazor.Dev.Blog.Services
             return categoryCache;
         }
 
+        public async Task<Category> GetCategoryAsync(string categoryNaturalID, bool refreshCache = false)
+        {
+            if (string.IsNullOrEmpty(categoryNaturalID))
+                return null;
+
+            return (await GetAllCategoriesAsync(refreshCache)).FirstOrDefault(category => category.CategoryNaturalID == categoryNaturalID);
+        }
+
         public async Task<Category> GetCategoryForPost(Post post, bool refreshCache = false)
         {
             if (post == null)
