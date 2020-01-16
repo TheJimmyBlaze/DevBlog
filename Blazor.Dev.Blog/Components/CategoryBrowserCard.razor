@@ -58,7 +58,7 @@
         {
             Post post = await PostService.GetPostAsync(PostNaturalID);
             posts = await PostService.GetAllPostsForCategory(post.CategoryNaturalID);
-            posts.OrderByDescending(post => post.CreationDateUTC);
+            posts = posts.OrderBy(post => post.CreationDateUTC);
 
             StateHasChanged();
         }
