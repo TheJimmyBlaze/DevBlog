@@ -44,8 +44,6 @@
     </div>
 
 @code {
-    [Parameter]
-    public string PostNaturalID { get; set; }
 
     private Post post;
     private Category category;
@@ -61,7 +59,7 @@
     {
         if (firstRender)
         {
-            post = await PostService.GetPostAsync(PostNaturalID);
+            post = await PostService.GetLatestPostAsync();
             category = await CategoryService.GetCategoryForPost(post);
 
             StateHasChanged();

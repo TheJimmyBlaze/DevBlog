@@ -90,6 +90,17 @@ namespace Blazor.Dev.Blog.Services
             return (await GetAllPostsAync(refreshCache)).Where(post => post.CategoryNaturalID == categoryNaturalID);
         }
 
+        public async Task<Post> GetLatestPostAsync(bool refreshCache = false)
+        {
+            IEnumerable<Post> posts = await GetAllPostsAync(refreshCache);
+            if (posts.Count() == 0)
+                return null;
+
+            Post latestPost = posts.OrderByDescending(post => post.CreationDateUTC).First();
+
+            return latestPost;
+        }
+
         public async Task<Post> GetLatestPostForCategoryAsync(string categoryNaturalID, bool refreshCache = false)
         {
             if (string.IsNullOrEmpty(categoryNaturalID))

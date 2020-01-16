@@ -1,0 +1,51 @@
+<h2>Yeah Okay But Why Tho?</h2>
+<p>
+    Spontaneous creative motivation is an invigorating feeling, but rarely results in anything meaningful in my experience. 
+    Many a time have I started a project either for it to become forgotten or abandoned. 
+    The same freedom that affords me the ability to create what I choose, allows for me to hop between projects with reckless abandoned. 
+    Seldom is it a work of my own be completed.
+</p>
+<p>
+    With this blog, I hope to constrain those projects, bring myself some accountability for what I have started, and create some record of learnings in the process. 
+    However these are just motivations, the real purpose is to diarise their design and implementation process. 
+    The simple act of recording what one is about to do and the result one it has been done, is an attributing factor to many greater successes. 
+    The hypothesis and the conclusion are both critical parts of the scientific method, and in such those will be the function of the blog. 
+</p>
+<p>
+    I would hope that in the process of recording thing which I have done, and will do, I and those reading, will learn a thing or two. 
+    Be it how to implement a technology, or ultimately how to fail to implement a technology. Both are equally valuable experiences. 
+</p>
+
+<h2>Inspiration</h2>
+<p>
+    I wasn't really sure where to start, but I had found some inspiration in <a href="https://rust.facepunch.com/blog/" target="_blank">Facepunch Studio's Dev Blog for their game: Rust</a>. 
+    The only motivation I had for choosing this blog as inspiration was that it was one of the first Google results for the keyword search: "Dev Blog". 
+    The imediate take aways from their blog was that it was dark, clean, and sharp. I wanted my blog to have the same properties. 
+    However Bootstrap doesn't really do Sharp very well out of the box, and I didn't want to go against the grain, so I settled for soft instead. 
+</p>
+<p>
+    The Rust blog has a jumbotron looking thing at the top, highlighting their latest updates so I knew I had to get me one of those. 
+    They had a list of list of articles under that, but since this was more of a project based blog I opted for a list of categories instead. 
+    And since this blog is supposed to double duty as a resume extension, I had to have a 'profile' section (complete with sick triangle background). 
+</p>
+<p>
+    I didn't want updating the blog to be a big hassel, and I don't really want to bother making any tools to update the blog. So I opted for the laziest solution I could think of: 
+    the classic "just dump all the shit into the wwwroot folder and programatically grab it out" approach. 
+    So the whole back end of the site is just a few .json, .html, and .png files. Which I'm happy with. It's simple to update, and easy to maintain. 
+</p>
+
+<h2>Hows it work?</h2>
+<p>
+    The tech I've chosen to build the blog out of is Blazor, Bootstrap, and some good old fashion .json files. 
+    Blazor is a relative new Microsoft technology that lets you build rich web UIs with C# instead of Javascript. 
+    I've chosen to use Server side Blazor which was more easily assessible for me to learn, more on this in a future post. 
+    Blazor uses the Razor syntax for writing components, 
+    and since everything is essentially a component in Blazor it was quick and easy to throw together the whole site with a little Bootstrap and C#. 
+    I put together a few Services for retrieving posts and categories from .json files in wwwwroot, and injected them into the required components with Blazor build in IoC container.
+    From 'Go to Show' only took a few hours, spread out over a few days. I would recommend Blazor to anyone looking to build a web site or web tool without prior experience.
+</p>
+<p>
+    As this post was intended as a kind of intro to what I'm doing here I'm not going to go into any details. 
+    All the jucy stuff will be in follow up posts. Up next is going to be how to Blazor 101, and an intro to the Blazor Components I've used in the creation of this blog.
+    I've got an idea for another Blazor project already cooking up, so It'll be good to reflect on the things I've learnt in the process of making this one. 
+</p>

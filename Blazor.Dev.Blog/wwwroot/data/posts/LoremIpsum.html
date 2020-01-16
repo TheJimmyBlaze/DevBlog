@@ -19,9 +19,12 @@
 </ul>
 
 <pre><code>
-#header h1 a {
-  display: block;
-  width: 300px;
-  height: 80px;
-}
+    if (firstRender)
+    {
+        Post post = await PostService.GetPostAsync(PostNaturalID);
+        posts = await PostService.GetAllPostsForCategory(post.CategoryNaturalID);
+        posts.OrderByDescending(post => post.CreationDateUTC);
+
+        StateHasChanged();
+    }
 </code></pre>

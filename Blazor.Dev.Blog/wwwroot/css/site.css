@@ -4,6 +4,8 @@
     --blog-on-background: #ffffff;
     --blog-mid-background: #292E33;
     --blog-on-mid-background: #ffffff;
+
+    --blog-code: #01D8FE;
 }
 
 .blog-background {
@@ -29,4 +31,12 @@
 .blog-latest-update-card-content {
     opacity: 0.9;
     margin: -1px;
+}
+
+.blog-category-img {
+    object-fit: cover;
+}
+
+pre code {
+    color: var(--blog-code);
 }

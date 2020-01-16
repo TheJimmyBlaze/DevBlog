@@ -1,0 +1,15 @@
+{
+    "PostNaturalID": "Why",
+    "CategoryNaturalID": "DevBlog",
+    "Title": "Why?",
+    "CreationDateUTC": "2020-01-16T06:38:00.0Z",
+    "ImageName": "DevBlog\\Why.png",
+    "Blurb": "Whats the point in a development blog? I explain the motivations behind this blogs creation, and why I've choosen the technology behind it.",
+    "Body": "DevBlog\\Why.html",
+    "Tags": [
+      "category;DevBlog",
+      "topic;Concept",
+      "tech;Blazor",
+      "tech;Bootstrap"
+    ]
+  }
