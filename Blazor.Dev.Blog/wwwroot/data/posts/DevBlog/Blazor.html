@@ -1,0 +1,190 @@
+<h2>What is Blazor?</h2>
+<p>
+    Blazor lets you build interactive web UIs using C# instead of Javascript.
+    Blazor apps are built using reusable web UI components implemented using C# and HTML.
+    Blazor has a focus on programming with the Modular Design pattern, with an emphasis on reusability and separation of concerns.
+    Both the server and client code is written in C# allowing for a common code base to be shared.
+</p>
+<p>
+    Blazor uses Razor pages to define it's components (components being reuable UI snippets), this allows for C# to be directly interwoven into the front end code.
+    A Razor page is essentially a combination of Controller and View into one file.
+    Combining this with the nature of Blazors design structure empassing many small components each with their own separate concern, allows for increased productivity in my experience.
+    I was able to go from nothing to website in a couple of hours.
+</p>
+<p>
+    Blazor is a feature of ASP.NET Core, and as such leverages the dependency injection (DI) design pattern present within core to achieve built in Invesion of Control (IoC).
+    My implementation was heavily relient of the DI pattern, being built in two halves:
+    <ul>
+        <li>
+            <b>Services:</b> providing access to the data for the website.
+            Containing IO, sorting, and filtering algorithms used by the 'front end' to use in their display of UI components.
+            Written in C# as typical classes.
+        </li>
+        <li>
+            <b>Components:</b> Individual elements of a greater UI. 
+            Have a singular concern, i.e: displaying the most recent post on the index.
+            Written as a Razor page, using a combination of HTML and C# (and in my case; Bootstrap).
+        </li>
+    </ul>
+</p>
+<br>
+
+<h2>Blazor, and Razor</h2>
+<p>
+    Everything you see in Blazor is a component.
+    When you create a new Blazor app using Visual Studio's Blazor project template, you will be given two namespaces: Pages, and Shared.
+    Both of these namespaces contain a set of components.
+</p>
+<p>
+    The Shared namespace contains defines the layouts which may be wrapped arround pages. 
+    MainLayout.razor wraps all of the template pages with a simple navigation menu, which itself is defined within NavMenu.razor (also in the Shared namespace).
+    Layouts must inherit from LayoutComponentBase, or one of its ancestors.
+</p>
+<p>
+    The Pages namespace contains each of the pages.
+    Each page is defined with a route at the top of the page, Index.razor is a little unique as it contains '/' as it's route, which as the name and route implies is the landing page.
+    Each of the pages may define their own layout, but in the VS template they all make use of MainLayout.
+    Pages take the place of the '@Body' tag inside of their respective layout Razor.
+</p>
+<p>
+    Pages themselves are whoely defined in a single Razor file.
+    Just as MainLayout.razor contains NavMenu.razor as a component, pages may themselves contain components.
+    The VS template does not have any examples of such a page, so we will create our own.
+</p>
+<br>
+
+<h2>Hello World!</h2>
+<p>
+    The VS template is nice and all, but there it doesn't say Hello World, which is admittedly a downside to Blazor.
+    But don't worry we can fix that ourselves.
+</p>
+<p>
+    I've created a new "Razor Component" in the Pages namespace, and named it 'HelloWorld.razor'.
+    It is important to note that the quick option in VS to create a "Razor Page" doesn't not result in a "Razor Component",
+    but instead an ASP Razor Page, which is not really what we want, so I went through the Add > New Item menu.
+    The resulting razor looked like this:
+</p>
+
+<code>
+    &lt;h3&gt;HelloWorld&lt;/h3&gt;<br>
+    <br>
+    @code {<br>
+    <br>
+    }<br>
+    <br>
+</code>
+
+<p>
+    Notice that it says "HelloWorld" in the header at the top of the code snippet.
+    That's because that is what I named the component, if you named it something different, then it will say that instead.
+    I replaced the header with: <code>&lt;h3&gt;Hello World!&lt;hr&gt;</code> which is a little more traditional.
+</p>
+
+<p>
+    That's it, component is ready to use, so lets throw it in a page!
+    When I said there was not "Hello World!" in the template app, that was a little cheeky, because it almost does say that.
+    Index.razor says "Hello, world!", which is almost the same, but at the same time, it's not even close.
+    Let's replace the templates poor attempt at Hello World! with our own implementation.
+    I replaced it with the component we created above like so:
+</p>
+
+<code>
+    @page "/"<br>
+    <br>
+    &lt;HelloWord /&gt;<br>
+    <br>
+    Welcome to your new app.<br>
+    <br>
+</code>
+
+<p>
+    If you run the app now, you can see that the index has greatly improved with a more traditional "Hello World!".
+</p>
+
+<img src="\images\posts\DevBlog\HelloWorld1.png" class="img-fluid mr-1 my-2 mb-5" />
+
+<h2>Hello World 2.0</h2>
+<p>
+    Although the above Hello World! is sick, it could be sicker.
+    Some implementations of hello world include a textbox where the user can enter their name, and have a personalized "Hello Cam" message.
+    We can do the same thing in Blazor and it's not hard.
+</p>
+<p>
+    <b>Heads Up:</b> the VS Blazor template has Bootstrap pre installed, so I'm going to use that for the form elements.
+</p>
+<p>
+    Heres what my HelloWorld component looked like after I added the bootstrap form elements:
+</p>
+
+<code>
+    &lt;h3&gt;Hello World!&lt;/h3&gt;<br>
+    <br>
+    &lt;div class="form-group"&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;label for="helloWho"&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Who do hello?<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/label&gt;
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="text" class="form-control" id="helloWho"/&gt;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;small class="form-text text-muted"&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Personalize your Hello World message by entering your name.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/small&gt;<br>
+    &lt;div&gt;<br>
+    <br>
+    @code {<br>
+    <br>
+    }<br>
+    <br>
+</code>
+
+<p>
+    If you were to run this component now, it would behave exactly the same as the first iteration of Hello World we implemented.
+    That's because theres no logic yet. Theres nothing connected to the input, and there the word "World" is still just static html.
+    In a normal web page you would connect the two with Javascript.
+    But we don't want to do that, because we want the whole project to share a common code base.
+    So I piped up my Hello World with C# instead using the power of Blazor, and the Razor syntax, this is what I came up with:
+</p>
+
+<code>
+    &lt;h3&gt;Hello @Name!&lt;/h3&gt;<br>
+    <br>
+    &lt;div class="form-group"&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;label for="helloWho"&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Who do hello?<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/label&gt;
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="text" class="form-control" id="helloWho" @bind-value="@Name" @bind-value:event="oninput"/&gt;<br>
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;small class="form-text text-muted"&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Personalize your Hello World message by entering your name.<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/small&gt;<br>
+    &lt;div&gt;<br>
+    <br>
+    @code {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;public string Name { get; set; } = "World";
+    <br>
+    }<br>
+    <br>
+</code>
+
+<img src="\images\posts\DevBlog\HelloWorld2.png" class="img-fluid mr-1 my-2" />
+
+<p>
+    The way this works, is that regular C# code can be written directly into the <code>@Code</code> section.
+    I've added the <code>Name</code> property there.
+    Properties can be directly referenced from inside the cshtml of the Razor page by adding an "@" symbol, like in <code>Hello @Name!</code>.
+    This will insert the value of the Name property in place of the <code>@Name</code> tag at run time.
+</p>
+<p>
+    I've also connected to the input to the <code>Name</code> property with a two way binding that updates onInput (when the text is modified).
+    The <code>@bind-value="@Name"</code> binds the value of the input to the Name property value.
+    The second part: <code>@bind-value:event="@oninput"</code> overrides the default binding update event, replacing onChanged (which requires enter to be pressed) with onInput.
+</p>
+<p>
+    If you run the app now, the index will now have our fancy new Hello World component, and if you were to overtype the word "World" with your own name,
+    a personalized Hello message would be shown just for you.
+</p>
+<p>
+    This simple Hello World component doesn't touch on DI, or Service classes, but as I've said in a previous post, this web site still doesn't have a seach function.
+    When I explain my implementation of a search feature I'll describe how I use DI and a couple of services in that post.
+</p>

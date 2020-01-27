@@ -1,0 +1,15 @@
+{
+    "PostNaturalID": "Search",
+    "CategoryNaturalID": "DevBlog",
+    "Title": "A Search Feature",
+    "CreationDateUTC": "2020-01-27T6:20:00.0Z",
+    "ImageName": "DevBlog\\Blazor.png",
+    "Blurb": "Creating the front end experience, which will later be augemented with Lucene index based search functionality for finding the pages you need.",
+    "Body": "DevBlog\\Search.html",
+    "Tags": [
+      "category;DevBlog",
+      "topic;UI",
+      "tech;Blazor",
+      "tech;Bootstrap"
+    ]
+  }

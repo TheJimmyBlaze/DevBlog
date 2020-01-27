@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.Dev.Blog", "Blazor.Dev.Blog\Blazor.Dev.Blog.csproj", "{1714F25E-8232-409A-A921-9023F40BF155}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Dev.Blog.Models", "Blazor.Dev.Blog.Models\Blazor.Dev.Blog.Models.csproj", "{4C55A627-D47C-476B-8CA6-D5949142D2E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.Dev.Blog.LuceneManager", "Blazor.Dev.Blog.LuceneManager\Blazor.Dev.Blog.LuceneManager.csproj", "{2D029711-E06D-4EDA-94B3-775FC10E49C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{1714F25E-8232-409A-A921-9023F40BF155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1714F25E-8232-409A-A921-9023F40BF155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1714F25E-8232-409A-A921-9023F40BF155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C55A627-D47C-476B-8CA6-D5949142D2E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C55A627-D47C-476B-8CA6-D5949142D2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C55A627-D47C-476B-8CA6-D5949142D2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C55A627-D47C-476B-8CA6-D5949142D2E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D029711-E06D-4EDA-94B3-775FC10E49C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D029711-E06D-4EDA-94B3-775FC10E49C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D029711-E06D-4EDA-94B3-775FC10E49C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D029711-E06D-4EDA-94B3-775FC10E49C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

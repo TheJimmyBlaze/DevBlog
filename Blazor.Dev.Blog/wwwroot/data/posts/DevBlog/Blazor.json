@@ -1,11 +1,11 @@
 {
     "PostNaturalID": "Blazor",
     "CategoryNaturalID": "DevBlog",
-    "Title": "What is Blazor",
+    "Title": "What is Blazor?",
     "CreationDateUTC": "2020-01-17T11:45:00.0Z",
     "ImageName": "DevBlog\\Blazor.png",
     "Blurb": "Blazor is a web framework that through the power of SignalR and Web Assembly, lets you write your front end UI code in C# and run it on the server. Here's how I've used it in this blog.",
-    "Body": "DevBlog\\Why.html",
+    "Body": "DevBlog\\Blazor.html",
     "Tags": [
       "category;DevBlog",
       "topic;Rundown",
