@@ -1,5 +1,6 @@
 ﻿@using Models;
 @using Services;
+@inject PostService PostService;
 @inject CategoryService CategoryService;
 
 @page "/"
@@ -10,7 +11,19 @@
             <Blazor.Dev.Blog.Components.ProfileCard ProfileJsonPath="CameronTaylor.json" />
         </div>
         <div class="col-md-8 d-flex align-items-stretch py-3 py-xl-4">
-            <Blazor.Dev.Blog.Components.LatestUpdateCard />
+            @if (latestUpdate == null)
+            {
+                <div class="container bg-secondary rounded m-3 py-3">
+                    <h6 class="text">Loading Latest Post...</h6>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <Blazor.Dev.Blog.Components.PostPreviewCard PostNaturalID="@latestUpdate.PostNaturalID" />
+            }
         </div>
     </div>
 
@@ -45,11 +58,17 @@
 </div>
 
 @code  {
+    private Post latestUpdate;
     private IEnumerable<Category> categories;
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        categories = await CategoryService.GetAllCategoriesAsync();
-        StateHasChanged();
+        if (firstRender)
+        {
+            latestUpdate = await PostService.GetLatestPostAsync();
+            categories = await CategoryService.GetAllCategoriesAsync();
+
+            StateHasChanged();
+        }
     }
 }

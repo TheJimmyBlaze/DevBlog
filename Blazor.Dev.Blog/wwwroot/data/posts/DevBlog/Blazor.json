@@ -6,10 +6,11 @@
     "ImageName": "DevBlog\\Blazor.png",
     "Blurb": "Blazor is a web framework that through the power of SignalR and Web Assembly, lets you write your front end UI code in C# and run it on the server. Here's how I've used it in this blog.",
     "Body": "DevBlog\\Blazor.html",
-    "Tags": [
+  "Tags": [
       "category;DevBlog",
-      "topic;Rundown",
+      "topic;Tutorial",
       "tech;Blazor",
-      "tech;.Net Core"
+      "tech;.NetCore",
+      "tech;Bootstrap"
     ]
   }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Blazor.Dev.Blog.LuceneManager
+namespace Blazor.Dev.Blog.LuceneIndex.Manager
 {
     class DataLoader
     {

@@ -1,12 +1,10 @@
 ﻿using Blazor.Dev.Blog.Models;
-using Lucene.Net.Index;
-using Lucene.Net.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Blazor.Dev.Blog.LuceneManager
+namespace Blazor.Dev.Blog.LuceneIndex.Manager
 {
     static class CommandInterpreter
     {
@@ -75,7 +73,14 @@ namespace Blazor.Dev.Blog.LuceneManager
         private static void Test(List<string> terms)
         {
             Indexer indexer = new Indexer(Program.indexDirectory);
-            indexer.Search(terms);
+            Console.WriteLine("Searching...");
+            List<string> results = indexer.SearchBody(terms);
+
+            Console.WriteLine("Found: {0} results", results.Count);
+            foreach(string postNaturalID in results)
+            {
+                Console.WriteLine("ID: {0}", postNaturalID);
+            }
         }
     }
 }

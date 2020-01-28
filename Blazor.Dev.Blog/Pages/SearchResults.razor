@@ -1,0 +1,112 @@
+﻿@using Services;
+@inject PostService PostService;
+@inject CategoryService CategoryService;
+@inject LuceneSearchService SearchService;
+
+@page "/search/{SearchTerm}"
+@page "/search/tag/{SearchTag}"
+@page "/search/category/{Category}"
+
+    <div class="container">
+        <div class="row">
+            @if(postNaturalIDs == null)
+            {
+                <div class="row bg-dark p-3 rounded w-50 mx-auto my-3">
+                    <div class="container bg-secondary rounded my-auto py-3">
+                        <h6 class="text">Searching...</h6>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-xl-3 col-lg-4">
+                    <div class="row mx-auto">
+                        <div class="col-12 mt-3 p-0">
+                            <Blazor.Dev.Blog.Components.TagBrowser />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-9 col-lg-8">
+                    <div class="container bg-dark rounded py-3 my-3 mx-auto">
+                        @if(postNaturalIDs.Count == 0)
+                        {
+                            <div class="row mx-auto p-3 bg-secondary rounded">
+                                <h6 class="text">
+                                    No posts match the search: @SearchTerm@SearchTag 
+                                </h6>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach(string postNaturalID in postNaturalIDs)
+                            {
+                                <div class="row my-3 mx-auto">
+                                    <Blazor.Dev.Blog.Components.PostPreviewCard PostNaturalID="@postNaturalID" />
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+@code {
+    private string searchTerm;
+    [Parameter]
+    public string SearchTerm
+    {
+        get { return searchTerm; }
+        set
+        {
+            if (value == null)
+                return;
+
+            searchTag = null;
+
+            searchTerm = value;
+            OnAfterRender(true);
+        }
+    }
+
+    private string searchTag;
+    [Parameter]
+    public string SearchTag
+    {
+        get { return searchTag; }
+        set
+        {
+            if (value == null)
+                return;
+
+            searchTerm = null;
+
+            searchTag = value;
+            OnAfterRender(true);
+        }
+    }
+
+    [Parameter]
+    public string Category { get; set; }
+
+    public List<string> postNaturalIDs;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!string.IsNullOrEmpty(SearchTerm))
+                postNaturalIDs = SearchService.SearchBody(SearchTerm).Distinct().ToList();
+            else if (!string.IsNullOrEmpty(SearchTag))
+                postNaturalIDs = SearchService.SearchTags(SearchTag).Distinct().ToList();
+            else if (!string.IsNullOrEmpty(Category))
+                postNaturalIDs = SearchService.SearchCategories(Category).Distinct().ToList();
+
+            StateHasChanged();
+        }
+    }
+}

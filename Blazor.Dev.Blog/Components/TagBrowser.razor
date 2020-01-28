@@ -1,0 +1,37 @@
+﻿@using Services;
+@inject PostService PostService;
+
+<div class="container bg-dark rounded p-3 mx-auto">
+
+    <h3 class="text-muted">Browse Tags</h3>
+
+    @if (tags == null)
+    {
+        <div class="container bg-secondary rounded my-auto py-3">
+            <h6 class="text">Collecting Tags...</h6>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
+            </div>
+        </div>
+    }
+    else
+    { 
+        @foreach (Tuple<string, string> tag in tags)
+        {
+            <a href="search/tag/@tag.Item2" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
+        }
+    }
+</div>
+
+@code {
+    private List<Tuple<string, string>> tags;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            tags = await PostService.CollectAllTags();
+            StateHasChanged();
+        }
+    }
+}

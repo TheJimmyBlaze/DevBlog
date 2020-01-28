@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Blazor.Dev.Blog.LuceneManager
+namespace Blazor.Dev.Blog.LuceneIndex.Manager
 {
     class Program
     {

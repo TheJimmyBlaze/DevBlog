@@ -1,0 +1,85 @@
+<h2>Search Design</h2>
+<p>
+    The primary function of the search feature is to expose posts containing key word search terms.
+    I have also been tagging posts with key word tags, and I wanted to expose a search for posts sharing common tags at the same time.
+    And lastly, the current category browsing function only opens the first post in a given category, so I want to overhaul that system as part of this enhancement.
+</p>
+<p>
+    With my three goals in mind, there are a few things that we will need before we can get started.
+    Firstly, some service will need to exist which will allow for quickly identifying posts which match search requirements.
+    Second, a set of routes allowing for a dynamic way of distinguishing search types, i.e: key word, tag, category.
+    And Third, some Razor to display it all with.
+</p>
+<br />
+
+<h2>Search Service</h2>
+<p>
+    I could build the search service by simply enumerating all posts, searching the body html for key words, but that will be very slow.
+    I could instead use Elastic Search, but that requires an Elastic Compute Cluster, and I don't want to involve any external services.
+    As Elastic Search is built ontop of Lucene, I could simply use that.
+    Using Lucene to index the psots, and store the indexes in the wwwroot, mimics how the posts themselves are stored simply in json and html in the wwwroot directory.
+    Lucene seems like a natural fit, and it just so happens that there is a <a href="https://lucenenet.apache.org/" target="_blank">.NET port</a>.
+</p>
+<p>
+    Lucene is an Apache Foundation software, distributed as a free and open source search engine library.
+    It has a bunch of cool features, but the one we need for searching the website is simply the indexing and searching functionality.
+    Although lucene can be used as a 'real time' search engine, we don't really need that for our use case, and for simplicity of implementation, we only need to reindex when adding new posts.
+    Because of this it may be a good idea to create a utility program which will build the indexes which the website will use to search.
+    And the website can remain responsible only for searching the indexes for requested pages.
+</p>
+<p>
+    Lucene.Net is available as a nuget package, but since Blazor is an ASP.NET Core technology, the nuget package is not fully compatible.
+    This is not an issue for our use case though, as I have already tested that the nuget package will work for the functionality we require.
+</p>
+<p>
+    More on specific Lucene implementation will follow in the next post.
+</p>
+<br />
+
+<h2>Tripple Routes</h2>
+<p>
+    In the previous post we talked about routing a page with the <code>@page</code> tag at the top of the page.
+    However, there is no limit to a single route on a razor page. You can have as many as you like.
+    In our case we need 3; one for each of the three types of search.
+    We will use:
+    <code>@page "/search"</code>
+    <code>@page "/search/tag"</code>
+    <code>@page "/search/category"</code>
+</p>
+<p>
+    There is some more utility we can derive from these routes, however.
+    The search page, whichever route is used to arrive at it, still requires some term to be used to search with.
+    This search term can be loaded into the route as such:
+    <code>@page "/search/{SearchTerm}"</code>
+    <code>@page "/search/tag/{Tag}"</code>
+    <code>@page "/search/category/{Category}"</code>
+</p>
+<p>
+    For this to work we simply need to bind the variables contained with the squiggly braces, with a property within the <code>@code</code> section of the Razor.
+    I bound my routes to some properties which did a little extra work.
+    I wanted the page to refresh even if the route does not change, just the property value does.
+    I did this through a call to <code>OnAfterRender</code> to retrigger the loading events, like so:
+</p>
+<code>
+    private string searchTerm;<br />
+    [Parameter]<br />
+    public string SearchTerm<br />
+    {<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;get { return searchTerm; }<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;set<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;{<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (value == null)<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return;<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;searchTag = null;<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;searchTerm = value;<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OnAfterRender(true);<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br />
+    }<br />
+</code>
+
+<h2>The Razor</h2>
+<p>
+    Todo: write this.
+</p>

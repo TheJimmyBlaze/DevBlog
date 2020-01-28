@@ -47,7 +47,7 @@
                             @foreach (string raw in post.Tags)
                             {
                                 Tuple<string, string> tag = PostService.CreateTag(raw);
-                                <a href="#" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
+                                <a href="search/tag/@tag.Item2" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
                             }
                         </div>
 

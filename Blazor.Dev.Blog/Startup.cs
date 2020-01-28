@@ -32,6 +32,7 @@ namespace Blazor.Dev.Blog
             services.AddTransient<ProfileService>();
             services.AddSingleton<CategoryService>();
             services.AddSingleton<PostService>();
+            services.AddSingleton<LuceneSearchService>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

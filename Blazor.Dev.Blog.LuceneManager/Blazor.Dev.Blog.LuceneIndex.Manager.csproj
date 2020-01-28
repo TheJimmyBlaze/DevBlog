@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blazor.Dev.Blog.Lucene\Blazor.Dev.Blog.LuceneIndex.csproj" />
+    <ProjectReference Include="..\Blazor.Dev.Blog.Models\Blazor.Dev.Blog.Models.csproj" />
+  </ItemGroup>
+
+</Project>

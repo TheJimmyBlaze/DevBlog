@@ -15,6 +15,7 @@ namespace Blazor.Dev.Blog.Services
 
         private readonly IWebHostEnvironment environment;
         private readonly CategoryService categoryService;
+
         public PostService(IWebHostEnvironment environment, CategoryService categoryService)
         {
             this.environment = environment;
@@ -202,6 +203,16 @@ namespace Blazor.Dev.Blog.Services
                 throw new ArgumentException(string.Format("{0} Tag: {1} did not contain any text.", TAG_ERROR, raw));
 
             return new Tuple<string, string>(type, text);
+        }
+
+        public async Task<List<Tuple<string, string>>> CollectAllTags(bool refreshCache = false)
+        {
+            IEnumerable<Post> posts = await GetAllPostsAync(refreshCache);
+
+            List<string> rawTags = posts.SelectMany(post => post.Tags).Distinct().ToList();
+            List<Tuple<string, string>> tags = rawTags.Select(rawTag => CreateTag(rawTag)).OrderBy(tag => tag.Item2).ToList();
+
+            return tags;
         }
     }
 }

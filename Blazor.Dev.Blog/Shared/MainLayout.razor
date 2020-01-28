@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <div>
     <header>
@@ -11,21 +12,9 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Latest</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                </ul>
-
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-2 blog-background" type="search" placeholder="Search" />
-                    <button class="btn btn-success my-2 my-lg-0" type="Submit">Search</button>
+                <form class="form-inline my-2 my-lg-0 ml-auto">
+                    <input class="form-control mr-2 blog-background" type="search" placeholder="Search" @bind-value="@searchTerms" @bind-value:event="oninput" @onkeydown="Keypress"/>
+                    <a href="search/@searchTerms" class="btn btn-success my-2 my-lg-0">Search</a>
                 </form>
             </div>
         </nav>
@@ -35,3 +24,13 @@
         @Body
     </div>
 </div>
+
+@code  {
+    private string searchTerms;
+
+    private void Keypress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            NavigationManager.NavigateTo(string.Format("search/{0}", searchTerms), true);
+    }
+}

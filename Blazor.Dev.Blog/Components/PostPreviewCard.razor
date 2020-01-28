@@ -4,11 +4,11 @@
 @inject CategoryService CategoryService;
 
     <div class="card w-100 h-100 bg-dark" style="background: url(@SwitchURL(PostService.GetImagePath(post))); background-size: cover;">
-        <div class="card-body row no-gutters justify-content-end p-0 rounded-right blog-latest-update-card-content">
+        <div class="card-body row no-gutters justify-content-end p-0 rounded-right blog-post-preview-card-content">
             @if (post == null || category == null)
             {
                 <div class="container bg-secondary rounded my-auto mx-3 py-3">
-                    <h6 class="text">Loading Latest Post...</h6>
+                    <h6 class="text">Loading Post Preview...</h6>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:100%"></div>
                     </div>
@@ -21,7 +21,7 @@
                         @foreach(string raw in post.Tags)
                         {
                             Tuple<string, string> tag = PostService.CreateTag(raw);
-                            <a href="#" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
+                            <a href="search/tag/@tag.Item2" class="badge badge-@tag.Item1 ml-1">@tag.Item2</a>
                         }
                     </div>
 
@@ -45,6 +45,9 @@
 
 @code {
 
+    [Parameter]
+    public string PostNaturalID { get; set; }
+
     private Post post;
     private Category category;
 
@@ -59,7 +62,7 @@
     {
         if (firstRender)
         {
-            post = await PostService.GetLatestPostAsync();
+            post = await PostService.GetPostAsync(PostNaturalID);
             category = await CategoryService.GetCategoryForPost(post);
 
             StateHasChanged();
