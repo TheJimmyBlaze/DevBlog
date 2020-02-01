@@ -1,0 +1,14 @@
+﻿{
+  "PostNaturalID": "Lucene",
+  "CategoryNaturalID": "DevBlog",
+  "Title": "Lucene.NET",
+  "CreationDateUTC": "2020-02-02T10:01:00.0Z",
+  "ImageName": "DevBlog\\Lucene.png",
+  "Blurb": "A bit of background of what Lucene.NET is, and a brief description of how to use it for creating a document search.",
+  "Body": "DevBlog\\Lucene.html",
+  "Tags": [
+    "category;DevBlog",
+    "topic;Search",
+    "tech;Lucene"
+  ]
+}

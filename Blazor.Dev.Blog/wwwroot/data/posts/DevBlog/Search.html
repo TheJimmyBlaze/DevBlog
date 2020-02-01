@@ -78,8 +78,37 @@
     &nbsp;&nbsp;&nbsp;&nbsp;}<br />
     }<br />
 </code>
+<br />
 
 <h2>The Razor</h2>
 <p>
-    Todo: write this.
+    I originally planned to create a new component for displaying each of the search results.
+    The new component would display the category, post title, post date, and maybe a picture.
+    However, I realized that the LatestUpdate component already had all these things.
+    Due to the nature of Blazor's componentized design structure I can very easily reuse this component to display each of the results.
+    In addition, I want a component for the left side of the page to display a list of all of the Tags so a user can search quickly for any related tags they may want.
+    So the Razor is going to need one entirely new component, and modifications to an existing component, as well as a page to put them both on, pretty simple really.
+</p>
+<p>
+    The Tag component will need a modification to the Post service, in order to get a list of all tags on all posts.
+    The Post service already has a method to get all posts, so this is simple an iterration of each post joining each of the posts, and filtering to a distinct set.
+    Other than that, we can use the existing Bootstrap pill design to display then in a flex box.
+    All the Tags across the whole site will need to be modified (theres only like 2 other components that display then) to provide search hyperlinks to search for the coresponding tag.
+    After than this component should be completed.
+</p>
+<p>
+    The existing LatestUpdate component is currently designed to display only the newest post on the site, and obveously the name could be confusing when reused in this new way.
+    The name of the component will be switched to "PostPreview" and instead it will take a single Post's natural ID as an argument.
+    This natural ID can (in the case where this component is still used to display latest updates) can be collected from a new "LatestPost" function added to the Post service.
+    Other than these two modifications, the component should be ready to be reused for this application.
+    The fact it can so easily be applied to an application I never indeded it for is a credit to the design patterns recommended to be used with Blazor.
+</p>
+<p>
+    The page itself which will contain these two components is relatively simple.
+    It will need a couple of loading segments, one for the Tags while they are being collected, and another for the posts, while they are being collected.
+    The page itself will simply be two columns, the left for the tags, taking up 20% of the space, and the remaining 80% for the previews of the search results.
+    Each of the results will be displayed in a simple distinct list with each element being a preview.
+</p>
+<p>
+    Before we discuss the implementation futher I would like to go over Lucene, which will be used to power the search service, and is the topic of the following post.
 </p>

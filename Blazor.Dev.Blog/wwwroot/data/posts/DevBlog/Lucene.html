@@ -1,0 +1,141 @@
+﻿<h2>Lucene</h2>
+<p>
+    Lucene is a Search Engine library maintained by the Apache Foundation.
+    Lucene was originally written in Java but has been ported for serveral other platforms.
+    This post deals with the .NET port of Lucene available from Nuget <a href="https://www.nuget.org/packages/Lucene.Net/" target="_blank">here</a>,
+    however many of the principles discussed will be relevant to all implementations of Lucene.
+</p>
+<p>
+    Lucene is designed to provide search results as fast as possible, and it does this primarily through the construction, and maintenence of indexes.
+    Indexes are generally stored on a file system somewhere, and should be treated much the same as a database in terms of their maintenance.
+    The trick with Lucene is to get the construction and management of these indexes right.
+    The difference between a well designed, and poorly designed index is night and day and will ultimately determine the accuracy and speed by which search results are porivided.
+</p>
+<p>
+    Keep in mind that a lot of the out of the box components of lucene are mainly geared towards searching a collection of documents.
+    Think google returning a list of a websites, or your local library returning a list of books.
+    In our case, we're using it to return a list of posts contained in a website, which very closely models the original intentions of the Lucene library.
+</p>
+<p>
+    Lucene has a couple of other features not directly related to searching stuff, like result highlighting, spell checking, and text prediction.
+    These wont be covered in this post as they're not really relevant to the simple search system I plan to implement.
+</p>
+<br />
+
+<h2>Quick Start</h2>
+<p>
+    Before getting into any details, here is a simple implementation of .NET Lucene to get your teeth into.
+    The following contains a set of methods for creating an index, storing stuff in it, and querying it for results.
+    I would recommend creating a .NET app (core or framework, both should work) and trying out this code for yourself.
+    A good source of documents for testing indexes may be a Lorem Ipsum stream or something like that.
+</p>
+<p>
+    private const Lucene.Net.Util.Version VERSION = Lucene.Net.Util.Version.LUCENE_30;
+    private const int MAX_RESULTS = 100;
+</p>
+<p>
+    public const string ID = "ID";
+    public const string TEXT = "TEXT";
+</p>
+
+<code>
+    public IndexWriter OpenIndex(string indexDirectory)<br />
+    {<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;FSDirectory store = FSDirectory.Open(indexDirectory);<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;Analyzer analyzer = new StandardAnalyzer(VERSION);<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;IndexWriter writer = new IndexWriter(store, analyzer, MaxFieldLength.UNLIMITED);<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;return writer;<br />
+    }<br />
+    <br />
+    public void AddToIndex(string indexDirectory, string naturalID, string text)<br />
+    {<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;Document document = new Document();<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;document.Add(new Field(ID, naturalID, Field.Store.YES, Field.Index.NO)); //This value is not indexed, and thus is not searchable.<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;document.Add(new Field(TEXT, text, Field.Store.YES, Field.Index.ANALYZED)); //This value is indexed, and can be searched.<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;using IndexWriter writer = OpenIndex(indexDirectory);   //Make sure to 'use' this, as it is disposable and must be closed.<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;writer.AddDocument(document);<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;writer.Flush(true, false, true);<br />
+    }<br />
+    <br />
+    public IEnumerable&lt;Document&gt;
+    <br />
+    SearchText(string indexDirectory, string searchTerm)<br />
+    {<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;using IndexWriter writer = OpenIndex(indexDirectory);   //Make sure to 'use' this, as it is disposable and must be closed.<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;//Add the single search term into a query, more complex queries may have many terms.<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;PhraseQuery query = new PhraseQuery();<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;query.Add(new Term(TEXT, searchTerm));<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;IndexSearcher searcher = new IndexSearcher(writer.GetReader());<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;ScoreDoc[] hits = searcher.Search(query, MAX_RESULTS).ScoreDocs;<br />
+    <br />
+    &nbsp;&nbsp;&nbsp;&nbsp;//Little bit of linq to get the Documents based on hit ID numbers.<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;IEnumerable&lt;Document&gt;<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;results = hits.Select(hit => searcher.Doc(hit.Doc));<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;return results;<br />
+    }<br />
+</code>
+<br />
+
+<h2>Analyzers</h2>
+<p>
+    The key to good indexes, is using the correct analyzer, in some cases this may involve creating your own.
+    Analyzers define the rules for how a string is broken up into tokens, which are then stored in the index.
+    Analyzers are made from a set of Tokenizers, and optionally Token Filteres.
+    Each Tokenizer defines a single rule for string splitting.
+    Each Token Filter filters out unwanted Tokens from the results of the Tokenizer.
+</p>
+<p>
+    The Analyzer I have used in the snippet above is the StandardAnalyzer.
+    The Standard Analyzer uses a StandardTokenizer, filtered with a StandardFilter, LowerCaseFilter, and StopFilter (English stop filters).
+    From the <a href="http://lucenenet.apache.org/docs/3.0.3/dd/d87/class_lucene_1_1_net_1_1_analysis_1_1_standard_1_1_standard_tokenizer.html" target="_blank">Lucene docs</a>
+    the standard Tokenizer is described as:
+    <ul>
+        <li>Splits words at punctuation characters, removing punctuation. However, a dot that's not followed by whitespace is considered part of a token.</li>
+        <li>Splits words at hyphens, unless there's a number in the token, in which case the whole token is interpreted as a product number and is not split.</li>
+        <li>Recognizes email address and internet hostnames as one token.</li>
+    </ul>
+</p>
+<p>
+    This will be appropriate for most cases, however there are plenty other tokenizers available.
+    A full list can be found in the docs. But here is a short list of some of the other I have found usefull:
+
+    <ul>
+        <li>Letter Analyzer: Defines tokens as maximal strings of adjacent letters (only really works for english).</li>
+        <li>Stop Analyzer: Defines tokens as lengths of consecutive non stop characters.</li>
+        <li>Whitespace Analyzer: Defines tokens as lengths of consective non white space characters.</li>
+    </ul>
+</p>
+<p>
+    I've found that in most cases this set of 4 analyzers do a pretty good job at indexing most of the documents I've needed to index.
+    However some cases require a more personal touch.
+</p>
+<br />
+
+<h2>Custom Analyzers</h2>
+<p>
+    If none of the Analyzers available out of the box do the trick for the documents you're indexing, you can create your own.
+    This can usually be done by combining a set of existing out of the box Tokenizers and Token Filters in a unique way.
+    From my use cases, it's quite rare to encounter a document that cannot be tokenized with the out of the box tools provided to you.
+</p>
+<p>
+    Creating a custom Analyzer is simple:
+    <ul>
+        <li>Create a Tokenizer.</li>
+        <li>Feed the Tokenizer into a Filter to get a TokenStream.</li>
+        <li>Optionally feed the TokenStream back into a Filter.</li>
+        <li>Convert the TokenStream into a set of TokenStreamComponents.</li>
+    </ul>
+</p>
+<p>
+    The following snippet provides an example of the process:
+</p>
+<code>
+    Tokenizer tokenizer = new NGramTokenizer(VERSION, reader, Side.FRONT, 1, 5);<br />
+    TokenStream result = new NGramFilter(tokenizer);<br />
+    return new TokenStreamComponents(tokenizer, result);<br />
+</code>
