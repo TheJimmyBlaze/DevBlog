@@ -1,0 +1,60 @@
+﻿<h2>Jam Lite Networking</h2>
+<p>
+    Jam Lite is a simple TCPIP based network library designed to simplify implementation of TCPIP application development.
+    Jam Lite is written in .NET targeting the .NET framework, but works fine for .NET core also.
+    Data is searilized using a combination of Json Serialization from the <a href="https://www.nuget.org/packages/Newtonsoft.Json/" target="_blank">nuget package</a> 
+    and native .NET struct marshalling.
+</p>
+<p>
+    Creating a networking application using Jam Lite is simple and straight forward.
+    Both Jam Lite Client and Server classes have a comprehensive set of events, and are flexible enough to suit many scenarios.
+    And the Jam Lite Packages used to transmit data between client and server are maluable and error resistance.
+    Packages must be defined with a globally unique ID number for the purposes of serialization and deserialization of objects,
+    and allows for flexible organisation of these ID numbers.
+</p>
+<p>
+    Jam Lite is derived from an originally much more complex and feature rich library: JamLib.
+    All of the additional fluff of JamLib has been stripped away from the implementation of Jam Lite,
+    with a focus on portability and ease of use.
+    JamLib relied on strict inheritence rules to allow for interpretation and deserialization of messages,
+    but this has been refactored in to an easy to understand set of events.
+</p>
+<p>
+    Jam Lite is thread safe and makes use of many asyncronous opperation to allow for fast and light weight communication.
+    Both the Jam Lite Servers and Clients implement IDisposable and can be wrapped in a 'using' statement to ensure they are disposed of elegantly.
+    Jam Lite works best in conjunction with an IoC container and the Dependency Injection design pattern,
+    but is free to be implemented in which ever way is appropriate for you application.
+</p>
+<br />
+
+<h2>How it works</h2>
+<p>
+    A server is instantiated and opened to listen on a given port.
+    Each client connecting to the server is given it's own thread, recorded in a Client Connection object, and is constantly pinged to detect disconnections.
+    Connected clients in turn ping the server to detect detections from their end.
+    The ping message can be intercepted using the 'OnMessageReceieved' event to collect latenency information on either side.
+</p>
+<p>
+    Both Client and Client Connection objects are able to send messages between systems.
+    This is done through the Send method on either side.
+    Messages are sent in the form of JamPackets which must be created from a struct being marshalled into an array of bytes.
+    Structs are usually stored in the JamLite.Packet.Data namespace and a few exist by default for the Ping, and Debug Message utilities.
+</p>
+<p>
+    The Jam Packet object contains all the neccisary logic for sending and receiving messages.
+    The way in which a Jam Packet knows how much data to read from a stream, and then which data to marshal back into its respective structs,
+    is through the Jam Packet Header object.
+    A Jam Packet Header is always of a fixed length.
+    Marshalling the first few bytes of a stream read into a Jam Packet Header, will allow for the length of the trailing Jam Packet Body to be exposed.
+    Once the length of the Jam Packet Body is exposed, it can simply be read and marshalled.
+</p>
+<p>
+    In order for a Jam Packet to know how to marshal the body struct, the header must contain the unique ID number of the packet.
+    If the ID numbers are not unique then there is no way for the receiving end to know how to marshal a Packet Body back into its corresponding struct object.
+    The ID numbers for all struct objects are stored as constants within the structs.
+</p>
+<p>
+    Events should be regestered against their respective MessageReceviedEvent handlers in order to properly deserialize messages.
+    Each event should be listening for a specific type of message.
+    For an example of this implementation, the Ping request and Response can be referenced.
+</p>

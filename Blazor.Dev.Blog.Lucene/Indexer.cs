@@ -108,10 +108,7 @@ namespace Blazor.Dev.Blog.LuceneIndex
             IndexSearcher searcher = new IndexSearcher(writer.GetReader());
             ScoreDoc[] hits = searcher.Search(query, MAX_RESULTS).ScoreDocs;
 
-            IEnumerable<Document> documents = hits.Select(hit => searcher.Doc(hit.Doc));
-            documents = documents.OrderBy(doc => DateTime.Parse(doc.Get(POST_DATE)));
-
-            List<string> results = documents.Select(doc => doc.Get(POST_ID)).ToList();
+            List<string> results = hits.Select(hit => searcher.Doc(hit.Doc).Get(POST_ID)).ToList();
             return results;
         }
     }

@@ -1,0 +1,15 @@
+{
+  "PostNaturalID": "JamInfo",
+  "CategoryNaturalID": "Jam",
+  "Title": "Summary",
+  "CreationDateUTC": "2020-02-04T18:38:00.0Z",
+  "ImageName": "Jam\\Jam.png",
+  "Blurb": "Details behind Jam Lite, a TCPIP package for .NET framework and .NET core, designed to make networking in .NET easier to implement and faster to develop.",
+  "Body": "Jam\\JamInfo.html",
+  "Tags": [
+    "category;Jam",
+    "topic;Info",
+    "tech;C#",
+    "tech;TCPIP"
+  ]
+}

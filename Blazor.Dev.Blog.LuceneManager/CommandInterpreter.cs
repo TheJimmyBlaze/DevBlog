@@ -1,6 +1,7 @@
 ﻿using Blazor.Dev.Blog.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -45,6 +46,9 @@ namespace Blazor.Dev.Blog.LuceneIndex.Manager
 
         private static async void Rebuild()
         {
+            Console.WriteLine("Deleting existing indexes...");
+            Directory.EnumerateFiles(Program.indexDirectory).ToList().ForEach(file => File.Delete(file));
+            
             Console.WriteLine("Creating indexer in directory: {0}", Program.indexDirectory);
             Indexer indexer = new Indexer(Program.indexDirectory);
 
